@@ -2,7 +2,7 @@
 
 SERVICE_NAME="status_lcd"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
-SCRIPT_PATH="/home/pi/maestor_statuslcd/statusLCD.py"
+SCRIPT_PATH="/home/pi/nlbox-statuslcd/statusLCD.py"
 SERIAL_FILE="/home/pi/serial.txt"
 
 echo "🛑 LCD kijelző szolgáltatás eltávolítása..."

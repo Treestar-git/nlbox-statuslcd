@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SERVICE_NAME="status_lcd"
-SCRIPT_PATH="/home/pi/maestor_statuslcd/statusLCD.py"
+SCRIPT_PATH="/home/pi/nlbox-statuslcd/statusLCD.py"
 SERVICE_FILE="/etc/systemd/system/${SERVICE_NAME}.service"
 SERIAL_FILE="/etc/statuslcd/serial"
 RPLCD_REPO="https://github.com/dbrgn/RPLCD.git"

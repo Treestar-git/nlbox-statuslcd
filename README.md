@@ -5,7 +5,7 @@ Ez a projekt egy **2x16 karakteres LCD kijelzőn** jeleníti meg a **dátumot, i
 ## 📥 Telepítés
 1. **GitHub-ról klónozás:**
    ```bash
-   git clone https://github.com/MrFlowProduction/maestor_statuslcd.git
+   git clone https://github.com/Treestar-git/nlbox-statuslcd.git
    cd maestor_statuslcd
 
 2. **Beállítás automatikus induláshoz:**

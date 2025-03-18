@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO_URL="https://github.com/MrFlowProduction/maestor_statuslcd.git"
+REPO_URL="https://github.com/Treestar-git/nlbox-statuslcd.git"
 SERVICE_NAME="status_lcd"
 
 echo "🔄 Frissítés indítása..."
@@ -12,12 +12,12 @@ sudo systemctl stop ${SERVICE_NAME}
 # Legújabb verzió letöltése
 echo "📥 Legújabb verzió letöltése a GitHub-ról..."
 cd /home/pi
-if [ -d "maestor_statuslcd" ]; then
-    cd maestor_statuslcd
+if [ -d "nlbox-statuslcd" ]; then
+    cd nlbox-statuslcd
     git pull
 else
     git clone ${REPO_URL}
-    cd maestor_statuslcd
+    cd nlbox-statuslcd
 fi
 
 # Szolgáltatás újraindítása
