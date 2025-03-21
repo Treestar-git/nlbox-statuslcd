@@ -6,7 +6,7 @@ Ez a projekt egy **2x16 karakteres LCD kijelzőn** jeleníti meg a **dátumot, i
 1. **GitHub-ról klónozás:**
    ```bash
    git clone https://github.com/Treestar-git/nlbox-statuslcd.git
-   cd maestor_statuslcd
+   cd nlbox-statuslcd
 
 2. **Beállítás automatikus induláshoz:**
    ```bash
