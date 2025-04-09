@@ -185,7 +185,7 @@ def print_containers():
     "pis": "PIS",
     "rabbitmq-rabbitmq-1": "MQTT"
     }
-    for container_name, display_name in containers:
+    for container_name, display_name in containers.items():
         try:
             status, version = get_container_info(container_name)
             # Felső sor: saját név + verzió
