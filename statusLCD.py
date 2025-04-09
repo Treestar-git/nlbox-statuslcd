@@ -262,8 +262,8 @@ def display_data():
             print_containers()
 
 
-        except Exception:
-            print("LCD kapcsolat megszakadt, újrapróbálkozás...")
+        except Exception as e:
+            print(f"LCD kapcsolat megszakadt, újrapróbálkozás... Exception: {e}")
             lcd = None  # LCD kapcsolat megszakadt, meg kell próbálni újracsatlakozni
 
 
