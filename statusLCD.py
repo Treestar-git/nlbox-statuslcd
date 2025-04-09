@@ -186,17 +186,20 @@ def print_containers():
     "rabbitmq-rabbitmq-1": "MQTT"
     }
     for container_name, display_name in containers:
-        status, version = get_container_info(container_name)
-        # Felső sor: saját név + verzió
-        lcd.cursor_pos = (0, 0)
-        line = f"{display_name[:10]} v{version}"
-        lcd.write_string(line.ljust(16)[:16])
+        try:
+            status, version = get_container_info(container_name)
+            # Felső sor: saját név + verzió
+            lcd.cursor_pos = (0, 0)
+            line = f"{display_name[:10]} v{version}"
+            lcd.write_string(line.ljust(16)[:16])
 
-        # Alsó sor: státusz
-        lcd.cursor_pos = (1, 0)
-        lcd.write_string(status.ljust(16))
-        time.sleep(3)
-        lcd.clear()
+            # Alsó sor: státusz
+            lcd.cursor_pos = (1, 0)
+            lcd.write_string(status.ljust(16))
+            time.sleep(3)
+            lcd.clear()
+        except Exception as e:
+            print(f"Container print stat error: {e}")
 
 
 # Adatok kijelzése

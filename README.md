@@ -24,12 +24,12 @@ Ez a projekt egy **2x16 karakteres LCD kijelzőn** jeleníti meg a **dátumot, i
 
 5. **Állapot ellenőrzése:**
    ```bash
-   sudo systemctl status lcd_display
+   sudo systemctl status status_lcd
 
 6. **Kézi működtetés:**
    ```bash
-   sudo systemctl start lcd_display
-   sudo systemctl stop lcd_display
+   sudo systemctl start status_lcd
+   sudo systemctl stop status_lcd
 
 6. **Szolgáltatás letörlése:**
    ```bash
@@ -39,4 +39,4 @@ Ez a projekt egy **2x16 karakteres LCD kijelzőn** jeleníti meg a **dátumot, i
 7. **Hibaelhárítás:**
    Napló/Log megnézése
    ```bash
-   journalctl -u lcd_display --no-pager --lines=50
+   journalctl -u status_lcd --no-pager --lines=50
