@@ -15,6 +15,7 @@ lcd = None
 
 # Sorozatszám fájl elérési útja
 SERIAL_FILE = "/etc/statuslcd/serial"
+MODEL_FILE = "/etc/statuslcd/model"
 
 
 # Sorozatszám beolvasása fájlból
@@ -25,6 +26,16 @@ def get_serial_number():
             return serial if serial else "No serial"
     except FileNotFoundError:
         return "No serial"
+    
+# Modelszám beolvasása fájlból
+def get_model_number():
+    try:
+        with open(MODEL_FILE, "r") as file:
+            serial = file.readline().strip()
+            return serial if serial else "No model"
+    except FileNotFoundError:
+        return "No model"
+
 
 
 
@@ -131,6 +142,62 @@ def exit_handler(signal_received=None, frame=None):
     print("⚠️  Rendszer vagy script leáll. LCD üzenet kiírva.")
     sys.exit(0)
 
+def get_container_info(container_name):
+    try:
+        # Állapot lekérdezése
+        result_state = subprocess.run(
+            ["docker", "ps", "-a", "--filter", f"name={container_name}", "--format", "{{.State}}"],
+            stdout=subprocess.PIPE, text=True)
+        state = result_state.stdout.strip()
+
+        # Verzió (image tag) lekérdezése
+        result_image = subprocess.run(
+            ["docker", "ps", "-a", "--filter", f"name={container_name}", "--format", "{{.Image}}"],
+            stdout=subprocess.PIPE, text=True)
+        image = result_image.stdout.strip()
+
+        # Verzió kivonása (csak ha ddu/vdu/pis típusú image)
+        version = "-"
+        if image.startswith("treestarhub/nlbox:"):
+            tag = image.split(":")[-1]  # pl. ddu-1.0.1.14
+            if "-" in tag:
+                version = tag.split("-")[1]  # csak a verziót vesszük: 1.0.1.14
+
+        # Állapot értelmezése
+        if state == "running":
+            status = "OK"
+        elif state in ["exited", "created", "paused", "restarting"]:
+            status = "STOPPED"
+        elif not state:
+            status = "MISSING"
+        else:
+            status = state.upper()
+
+        return status, version
+
+    except Exception:
+        return "ERROR", "-"
+    
+def print_containers():
+    containers = {
+    "ddu": "DDU",
+    "vdu": "VDU",
+    "pis": "PIS",
+    "rabbitmq-rabbitmq-1": "MQTT"
+    }
+    for container_name, display_name in containers:
+        status, version = get_container_info(container_name)
+        # Felső sor: saját név + verzió
+        lcd.cursor_pos = (0, 0)
+        line = f"{display_name[:10]} v{version}"
+        lcd.write_string(line.ljust(16)[:16])
+
+        # Alsó sor: státusz
+        lcd.cursor_pos = (1, 0)
+        lcd.write_string(status.ljust(16))
+        time.sleep(3)
+        lcd.clear()
+
 
 # Adatok kijelzése
 def display_data():
@@ -146,13 +213,14 @@ def display_data():
             connect_lcd()
 
         try:
-
+            
             # Készülék adatok megjelenítése
             lcd.clear()
+            model_number = get_model_number()
             lcd.cursor_pos = (0, 0)
             lcd.write_string("NewLine Kft.")  # Első sor
             lcd.cursor_pos = (1, 0)
-            lcd.write_string("NLBOX Rev. 1-A")  # Második sor
+            lcd.write_string(f"{model_number[:16]}")  # Második sor
             time.sleep(3)
 
             # Sorozatszám megjelenítése
@@ -188,15 +256,7 @@ def display_data():
             time.sleep(3)
 
             # Docker konténerek állapota
-            lcd.clear()
-            print_container_stat("pis", "PIS", 0)
-            print_container_stat("vdu", "VDU", 1)
-            time.sleep(3)
-
-            lcd.clear()
-            print_container_stat("ddu", "DDU", 0)
-            print_container_stat("rabbitmq-rabbitmq-1", "MQTT", 1)
-            time.sleep(3)
+            print_containers()
 
 
         except Exception:
