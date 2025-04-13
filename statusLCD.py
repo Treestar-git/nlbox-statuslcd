@@ -171,15 +171,18 @@ def get_container_info(container_name):
                 version = tag.split("-")[1]  # csak a verziót vesszük: 1.0.1.14
 
         # Állapot értelmezése
-         # Státusz meghatározása
         if state == "running":
-            return "RUNNING"
+            status = "RUNNING"
         elif state in ["created", "paused", "restarting"]:
-            return "STOPPED"
+            status = "STOPPED"
         elif state == "exited":
-            return "EXITED"
+            status = "EXITED"
+        elif not state:
+            status = "MISSING"
         else:
-            return "MISSING"
+            status = state.upper()
+
+        return status, version
 
     except Exception:
         return "ERROR", "-"
