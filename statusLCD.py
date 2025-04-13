@@ -13,6 +13,9 @@ from RPLCD.i2c import CharLCD
 # LCD kijelző beállításai
 lcd = None
 
+# Verzió
+version = "V1.3"
+
 # Sorozatszám fájl elérési útja
 SERIAL_FILE = "/etc/statuslcd/serial"
 MODEL_FILE = "/etc/statuslcd/model"
@@ -51,8 +54,10 @@ def get_container_status(container_name):
         # Státusz meghatározása
         if state == "running":
             return "RUNNING"
-        elif state in ["exited", "created", "paused", "restarting"]:
+        elif state in ["created", "paused", "restarting"]:
             return "STOPPED"
+        elif state == "exited":
+            return "EXITED"
         else:
             return "MISSING"
     
@@ -123,7 +128,9 @@ def connect_lcd():
                           cols=16, rows=2, charmap='A02', auto_linebreaks=True)
             lcd.clear()
             lcd.write_string("LCD Ready...")
-            time.sleep(1)
+            lcd.cursor_pos = (1, 0)
+            lcd.write_string(version)
+            time.sleep(2)
             return  # Sikeres csatlakozás esetén kilép
         except Exception:
             print("LCD nem elérhető, várakozás újracsatlakozásra...")
@@ -195,7 +202,8 @@ def print_containers():
 
             # Alsó sor: státusz
             lcd.cursor_pos = (1, 0)
-            lcd.write_string(status.ljust(16))
+            line = f"Status: {status}"
+            lcd.write_string(line.ljust(16))
             time.sleep(3)
             lcd.clear()
         except Exception as e:
@@ -207,6 +215,8 @@ def display_data():
     global lcd
     lcd.clear()
     lcd.write_string("Welcome")  # Első sor
+    lcd.cursor_pos = (1, 0)
+    lcd.write_string(version)
     time.sleep(3)
 
     while True:
